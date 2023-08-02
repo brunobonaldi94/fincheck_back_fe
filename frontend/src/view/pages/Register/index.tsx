@@ -29,7 +29,9 @@ export function Register() {
 				<Input 
 					type="password" 
 					placeholder="Senha" 
-					name="password"/>
+					name="password"
+					autoComplete="on"
+					/>
 				<Button type="submit" >Criar Conta</Button>
 			</form>
 		</>
