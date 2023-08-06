@@ -11,6 +11,7 @@ const schema = z.object({
 import { useMutation } from '@tanstack/react-query';
 import { SignupParams } from '../../../app/services/authService/signup';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../../app/hooks/useAuth';
 
 type FormData = z.infer<typeof schema>;
 
@@ -29,11 +30,11 @@ export function useRegisterController(){
 		},
 
 	});
-
+	const { signin } = useAuth();
 	const handleSubmit = hookFormHandleSubmit(async (data) => {
 		try {
 			const { accessToken } = await mutateAsync(data);
-			console.log(accessToken);
+			signin(accessToken);
 		} catch (error) {
 			toast.error("Error on register")
 		}

@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
       });
       request['userId'] = payload.sub;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid token');
     }
     return true;
   }
