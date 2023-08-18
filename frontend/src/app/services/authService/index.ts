@@ -5,8 +5,10 @@ import {
 import {
 	signin
 } from "./signin";
+import { signWithGoogle } from "./signWithGoogle";
 
 export const authService = {
 	signup,
 	signin,
+	signWithGoogle,
 }

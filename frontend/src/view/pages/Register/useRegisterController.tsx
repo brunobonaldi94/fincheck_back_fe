@@ -39,6 +39,7 @@ export function useRegisterController(){
 			toast.error("Error on register")
 		}
 	});
+
 	return {
 		register,
 		handleSubmit,

@@ -27,6 +27,9 @@ class Env {
     appSecret: string;
     callbackURL: string;
   };
+  @IsString()
+  @IsNotEmpty()
+  frontEndURL: string;
 }
 
 export const env: Env = plainToInstance(Env, {
@@ -42,6 +45,7 @@ export const env: Env = plainToInstance(Env, {
     appSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
   },
+  frontEndURL: process.env.FRONTEND_URL,
 });
 
 const errors = validateSync(env);

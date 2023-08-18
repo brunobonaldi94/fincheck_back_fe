@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { userService } from "../services/usersService";
 import { toast } from "react-hot-toast";
 import { LaunchScreen } from "../../view/components/LaunchScreen";
+import { cookiesKeys } from "../config/cookiesKeys";
+import CookieHandler from "../utils/CookieHandler";
 
 interface AuthContextValue {
 	signedIn: boolean;
@@ -13,8 +15,15 @@ interface AuthContextValue {
 export const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 
 export function AuthProvider({ children } : { children: React.ReactNode}) {
+
 	const [signedIn, setSignedIn] = useState<boolean>(() => {
 		const storedAccessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
+		const storedAccessTokenFromCookie = CookieHandler.getCookieValueByName(cookiesKeys.ACCESS_TOKEN)
+		if (storedAccessTokenFromCookie) {
+			localStorage.setItem(localStorageKeys.ACCESS_TOKEN, storedAccessTokenFromCookie);
+			CookieHandler.expireCookie(cookiesKeys.ACCESS_TOKEN);
+			return true;
+		}
 		return !!storedAccessToken;
 	});
 

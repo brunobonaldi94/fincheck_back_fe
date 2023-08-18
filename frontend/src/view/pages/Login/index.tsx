@@ -2,9 +2,16 @@ import { Link } from "react-router-dom";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { useLoginController } from "./useLoginController";
+import { ButtonGoogle } from "../../components/ButtonGoogle";
 
 export function Login() {
-	const { handleSubmit, register, errors, isLoading } = useLoginController();
+	const {
+			handleSubmit,
+			register,
+			errors,
+			isLoading,
+			signinWithGoogle,
+	} = useLoginController();
 	return (
 		<>
 			<header className="flex flex-col items-center gap-4 text-center">
@@ -33,6 +40,13 @@ export function Login() {
 					{...register('password')}
 					/>
 				<Button isLoading={isLoading} type="submit" >Entrar</Button>
+				<ButtonGoogle
+					onClick={signinWithGoogle}
+					isLoading={isLoading}
+					type="button"
+					className="bg-[#4285F4] hover:bg-[#6da4ff] ">
+						Entrar com Google
+					</ButtonGoogle>
 			</form>
 		</>
 	)
