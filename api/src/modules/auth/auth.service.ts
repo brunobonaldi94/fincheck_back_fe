@@ -59,7 +59,7 @@ export class AuthService {
         email,
         password: hashedPassword,
         loginType: loginType,
-        roleId: regularRole.id,
+        roleId: regularRole?.id ?? null,
         categories: {
           createMany: {
             data: [
