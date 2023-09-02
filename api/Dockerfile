@@ -2,6 +2,8 @@ FROM node:18.1.0-alpine3.14
 
 ARG DATABASE_URL
 
+RUN apk add --no-cache bash
+
 RUN mkdir /app && chown node:node /app
 WORKDIR /app
 
@@ -14,11 +16,7 @@ RUN npm install
 
 COPY --chown=node:node . .
 
-COPY prisma_start.sh ./
-
-RUN sh ./prisma_start.sh
-
 EXPOSE 3000 5555
 
-CMD ["npm", "run" , "start:dev"]
+CMD ["npm", "run", "start:dev"]
 
