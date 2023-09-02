@@ -1,0 +1,72 @@
+version: '3'
+services:
+
+  db_fincheck:
+    container_name: db_fincheck
+    image: postgres:15.4-alpine3.18
+    volumes:
+      - db_fincheck_vol:${PGDATA}
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=${PGDATA}
+    networks:
+      - server-side
+
+  api_fincheck:
+    container_name: api_fincheck
+    build:
+      context: "./api"
+      args:
+       - DATABASE_URL=${DATABASE_URL}
+    restart: always
+    depends_on:
+      - db_fincheck
+    env_file:
+      - .env
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+      - "5556:5555"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_CALLBACK_URL=${GOOGLE_CALLBACK_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+    networks:
+      - client-side
+      - server-side
+
+  frontend_fincheck:
+    container_name: frontend_fincheck
+    build:
+      context: "./frontend"
+    image: react
+    env_file:
+      - .env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api_fincheck
+    restart: always
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+    ports:
+      - "5173:5173"
+    networks:
+      - client-side
+
+networks:
+  client-side: {}
+  server-side: {}
+
+volumes:
+  db_fincheck_vol:
