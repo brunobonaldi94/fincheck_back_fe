@@ -14,7 +14,9 @@ COPY --chown=node:node package*.json ./
 
 RUN npm install
 
-COPY --chown=node:node . .
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY --chown=node:node --chmod=777 . .
 
 EXPOSE 3000 5555
 
