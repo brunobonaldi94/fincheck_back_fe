@@ -7,8 +7,14 @@ import { LaunchScreen } from "../../view/components/LaunchScreen";
 import { cookiesKeys } from "../config/cookiesKeys";
 import CookieHandler from "../utils/CookieHandler";
 
-interface AuthContextValue {
+export interface User {
+	name: string;
+	email: string;
 	signedIn: boolean;
+}
+
+interface AuthContextValue {
+	user: User;
 	signin: (accessToken: string) => void;
 	signout: () => void;
 }
@@ -27,7 +33,7 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 		return !!storedAccessToken;
 	});
 
-	const { isError, isFetching, isSuccess, remove} = useQuery({
+	const { isError, isFetching, isSuccess, remove, data} = useQuery({
 		queryKey: ["users", "me"],
 		queryFn: () => userService.me(),
 		enabled: signedIn,
@@ -52,8 +58,14 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 		}
 	}, [signout, isError])
 
+	const user: User = {
+		email: data?.email || "",
+		name: data?.name || "",
+		signedIn: isSuccess && signedIn
+	}
+
 	return (
-		<AuthContext.Provider value={{ signedIn: isSuccess && signedIn, signin, signout }}>
+		<AuthContext.Provider value={{ user, signin, signout }}>
 			<LaunchScreen
 				isLoading={isFetching}
 			/>

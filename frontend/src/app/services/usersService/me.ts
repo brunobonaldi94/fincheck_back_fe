@@ -2,7 +2,7 @@ import httpClient from "../HttpClient";
 
 export interface MeResponse {
 	email: string;
-	password: string;
+	name: string;
 }
 
 
