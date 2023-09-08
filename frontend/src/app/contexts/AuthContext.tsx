@@ -7,10 +7,13 @@ import { LaunchScreen } from "../../view/components/LaunchScreen";
 import { cookiesKeys } from "../config/cookiesKeys";
 import CookieHandler from "../utils/CookieHandler";
 
+
+
 export interface User {
 	name: string;
 	email: string;
 	signedIn: boolean;
+	role: string;
 }
 
 interface AuthContextValue {
@@ -61,6 +64,7 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 	const user: User = {
 		email: data?.email || "",
 		name: data?.name || "",
+		role: data?.role || "",
 		signedIn: isSuccess && signedIn
 	}
 
