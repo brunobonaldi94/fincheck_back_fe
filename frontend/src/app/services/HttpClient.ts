@@ -9,6 +9,7 @@ const httpClient = axios.create({
 	},
 })
 
+
 httpClient.interceptors.request.use((config) => {
 	const accessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
 	if (accessToken) {

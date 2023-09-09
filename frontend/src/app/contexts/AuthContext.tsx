@@ -59,6 +59,10 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 		localStorage.removeItem(localStorageKeys.ACCESS_TOKEN);
 		remove();
 		setSignedIn(false);
+		setUser(prevState => ({
+			...prevState,
+			signedIn: false,
+		}))
 	}, [remove]);
 
 	useEffect(() => {
@@ -67,8 +71,6 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 			signout();
 		}
 	}, [signout, isError])
-
-
 
 	useEffect(() => {
 		if (data) {

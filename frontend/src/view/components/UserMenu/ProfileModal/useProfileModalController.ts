@@ -7,7 +7,7 @@ import { UpdateUserParams } from "../../../../app/services/usersService/updateUs
 import { userService } from "../../../../app/services/usersService";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../../../../app/hooks/useAuth";
-
+import axios from "axios";
 
 
 export function useProfileModalController() {
@@ -55,7 +55,13 @@ type FormData = z.infer<typeof schema>;
 			toast.success("User updated")
 		}
 		catch (error) {
-			toast.error("Error on update user")
+			let errorMessage = "Error updating user";
+			if (axios.isAxiosError(error)) {
+				errorMessage = error?.response?.data?.message;
+			} else {
+				console.log(error);
+			}
+			toast.error(errorMessage)
 		}
 	})
 

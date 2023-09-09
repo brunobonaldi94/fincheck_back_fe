@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Role, User } from '@prisma/client';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { LoginType, User } from '@prisma/client';
 import { UserRepository } from 'src/shared/database/repositories/users.repositories';
 import { UpdateUserDto } from './dto/update-user-dto.dto';
 
@@ -7,6 +7,11 @@ import { UpdateUserDto } from './dto/update-user-dto.dto';
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  async getUserAllFieldsById(userId: string) {
+    return await this.userRepository.findUnique({
+      where: { id: userId },
+    });
+  }
   async getUserById(userId: string) {
     const userResponse = (await this.userRepository.findUnique({
       where: { id: userId },
@@ -28,8 +33,10 @@ export class UsersService {
     };
   }
   async updateUserById(userId: string, updateUserDto: UpdateUserDto) {
-    const currentUser = await this.getUserById(userId);
-
+    const currentUser = await this.getUserAllFieldsById(userId);
+    if (currentUser.loginType === LoginType.GOOGLE && updateUserDto.email) {
+      throw new ForbiddenException('Cannot update email for Google login type');
+    }
     const userResponse = (await this.userRepository.update({
       where: { id: userId },
       data: {
