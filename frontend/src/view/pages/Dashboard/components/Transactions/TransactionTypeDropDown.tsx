@@ -9,10 +9,10 @@ import { TransactionsIconColorized } from "../../../../components/icons/Transact
 export function TransactionTypeDropDown(){
 	return (
 		<DropdownMenu.Root>
-		<DropdownMenu.Trigger>
-			<button className="flex items-center gap-2">
+		<DropdownMenu.Trigger className="flex items-center gap-2">
+			<button>
 				<TransactionsIcon />
-				<span className="text-sm text-gray-900 tracking-[-0.5px] font-medium">Transacoes</span>
+					<span className="text-sm text-gray-900 tracking-[-0.5px] font-medium">Transacoes</span>
 				<ChevronDownIcon className="text-gray-900" />
 			</button>
 		</DropdownMenu.Trigger>

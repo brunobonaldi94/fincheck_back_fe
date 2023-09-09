@@ -16,8 +16,7 @@ function DropdownMenuRoot({children} :  {children: React.ReactNode}) {
 
 function DropdownMenuTrigger({children, className} :  DropDownMenuGenericsProps) {
 	return (
-		<RadixDropDownMenu.Trigger className={cn("outline-none",
-		className)}>
+		<RadixDropDownMenu.Trigger className={cn("outline-none",className)} asChild>
 			{children}
 		</RadixDropDownMenu.Trigger>
 	)
@@ -47,7 +46,7 @@ function DropdownMenuItem({children, className, onSelect} : DropdownMenuItemProp
 		<RadixDropDownMenu.Item
 			onSelect={onSelect}
 			className={cn(
-			"min-h-[40px] outline-none flex items-center py-2 px-3 text-gray-800 text-sm rounded-2xl transition-colors data-[highlighted]:bg-gray-50",
+			"min-h-[40px] outline-none flex items-center py-2 px-3 text-gray-800 text-sm rounded-2xl transition-colors data-[highlighted]:bg-gray-50 cursor-pointer",
 			className
 		)}>
 			{children}
