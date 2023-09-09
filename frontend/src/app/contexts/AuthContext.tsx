@@ -19,6 +19,7 @@ export interface User {
 interface AuthContextValue {
 	user: User;
 	signin: (accessToken: string) => void;
+	updateUser: (user: User) => void;
 	signout: () => void;
 }
 export const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
@@ -34,6 +35,12 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 			return true;
 		}
 		return !!storedAccessToken;
+	});
+	const [user, setUser] = useState<User>({
+		name: "",
+		email: "",
+		signedIn: false,
+		role: "",
 	});
 
 	const { isError, isFetching, isSuccess, remove, data} = useQuery({
@@ -61,15 +68,27 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 		}
 	}, [signout, isError])
 
-	const user: User = {
-		email: data?.email || "",
-		name: data?.name || "",
-		role: data?.role || "",
-		signedIn: isSuccess && signedIn
-	}
 
+
+	useEffect(() => {
+		if (data) {
+			const user: User = {
+				email: data?.email || "",
+				name: data?.name || "",
+				role: data?.role || "",
+				signedIn: isSuccess && signedIn
+			}
+			setUser(user);
+		}
+	}, [data, isSuccess, signedIn]);
+	const updateUser = useCallback((user: User) => {
+		setUser((prevUser) => ({
+			...prevUser,
+			...user,
+		}));
+	}, [])
 	return (
-		<AuthContext.Provider value={{ user, signin, signout }}>
+		<AuthContext.Provider value={{ user, signin,updateUser, signout }}>
 			<LaunchScreen
 				isLoading={isFetching}
 			/>
