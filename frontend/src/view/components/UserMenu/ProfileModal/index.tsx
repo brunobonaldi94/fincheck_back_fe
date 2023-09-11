@@ -15,6 +15,7 @@ export function ProfileModal({open, onClose}: ProfileModalProps) {
 		handleSubmit,
 		isLoading,
 		register,
+		loginType,
 	} = useProfileModalController();
 	return (
 		<div className={cn(
@@ -25,6 +26,7 @@ export function ProfileModal({open, onClose}: ProfileModalProps) {
 					<p className="bg-yellow-100 text-center rounded-md p-1 text-gray-800 border border-gray-100 shadow-sm">
 						Only the non-empty values will be updated!
 					</p>
+					<p className="tracking-[-0.5px] text-gray-800">Login Type: {loginType}</p>
 					<Input
 						type="text"
 						placeholder="Nome" {...register('name')}

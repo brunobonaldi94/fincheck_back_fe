@@ -6,13 +6,13 @@ import { toast } from "react-hot-toast";
 import { LaunchScreen } from "../../view/components/LaunchScreen";
 import { cookiesKeys } from "../config/cookiesKeys";
 import CookieHandler from "../utils/CookieHandler";
-
-
+import { LoginType } from "../services/usersService/me";
 
 export interface User {
 	name: string;
 	email: string;
 	signedIn: boolean;
+	loginType: LoginType;
 	role: string;
 }
 
@@ -39,6 +39,7 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 	const [user, setUser] = useState<User>({
 		name: "",
 		email: "",
+		loginType: LoginType.EMAIL,
 		signedIn: false,
 		role: "",
 	});
@@ -59,7 +60,7 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 		localStorage.removeItem(localStorageKeys.ACCESS_TOKEN);
 		remove();
 		setSignedIn(false);
-		setUser(prevState => ({
+		setUser((prevState) => ({
 			...prevState,
 			signedIn: false,
 		}))
@@ -78,6 +79,7 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 				email: data?.email || "",
 				name: data?.name || "",
 				role: data?.role || "",
+				loginType: data?.loginType || LoginType.EMAIL,
 				signedIn: isSuccess && signedIn
 			}
 			setUser(user);

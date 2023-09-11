@@ -1,8 +1,8 @@
 
-DOCKER_COMPOSE=sudo docker-compose
+DOCKER_COMPOSE=docker-compose
 
 up:
-	$(DOCKER_COMPOSE) up -d --build
+	$(DOCKER_COMPOSE) up -d
 	$(DOCKER_COMPOSE) exec api_fincheck npx prisma migrate dev 
 	$(DOCKER_COMPOSE) exec api_fincheck npx prisma db seed
 down:

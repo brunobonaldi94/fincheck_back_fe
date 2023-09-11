@@ -11,7 +11,7 @@ import axios from "axios";
 
 
 export function useProfileModalController() {
-	const { user: { name, email, signedIn }, updateUser} = useAuth();
+	const { user: { name, email, signedIn, loginType }, updateUser} = useAuth();
 
 	const schema = z.object({
 		name: z.string().optional(),
@@ -49,6 +49,7 @@ type FormData = z.infer<typeof schema>;
 			updateUser({
 				name: userResponse.name,
 				email: userResponse.email,
+				loginType: userResponse.loginType,
 				role: userResponse.role,
 				signedIn: signedIn,
 			});
@@ -70,5 +71,6 @@ type FormData = z.infer<typeof schema>;
 		handleSubmit,
 		errors,
 		isLoading,
+		loginType: loginType.slice(0, 1) + loginType.slice(1).toLowerCase()
 	}
 }

@@ -18,6 +18,7 @@ export class UsersService {
       select: {
         name: true,
         email: true,
+        loginType: true,
         role: {
           select: {
             name: true,
@@ -29,6 +30,7 @@ export class UsersService {
     return {
       name: userResponse.name,
       email: userResponse.email,
+      LoginType: userResponse.loginType,
       role: userResponse.role.name,
     };
   }
@@ -50,6 +52,7 @@ export class UsersService {
       select: {
         name: true,
         email: true,
+        loginType: true,
         role: {
           select: {
             name: true,
@@ -61,6 +64,7 @@ export class UsersService {
     return {
       name: userResponse.name,
       email: userResponse.email,
+      LoginType: userResponse.loginType,
       role: userResponse.role.name,
     };
   }

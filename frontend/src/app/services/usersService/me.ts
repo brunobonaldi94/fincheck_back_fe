@@ -1,8 +1,15 @@
 import httpClient from "../HttpClient";
 
+export enum LoginType {
+    EMAIL="EMAIL",
+    GOOGLE="GOOGLE",
+    FACEBOOK="FACEBOOK"
+}
+
 export interface MeResponse {
 	email: string;
 	name: string;
+	loginType: LoginType
 	role: string;
 }
 
