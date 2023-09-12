@@ -1,16 +1,17 @@
 import { Modal } from "../../../../components/Modal";
 import { InputCurrency } from "../../../../components/InputCurrency";
 
-import { useAccountsControllers } from "../../components/Accounts/useAccountsController";
+import { useNewAccountModalController } from "./useNewAccountModalController";
 import { Input } from "../../../../components/Input";
 import { Select } from "../../../../components/Select";
+import { ColorsDropDownInput } from "../../../../components/ColorsDropDownInput";
+import { Button } from "../../../../components/Button";
 
 export function NewAccountModal() {
 	const {
 		isNewAccountModalOpen,
 		closeNewAccountModal,
-	} = useAccountsControllers();
-
+	} = useNewAccountModalController();
 	return (
 		<Modal
 			title="Nova Conta"
@@ -39,7 +40,9 @@ export function NewAccountModal() {
 							{ value: "CASH", label: "Dinheiro Físico" },
 						]}
 					/>
+					<ColorsDropDownInput />
 				</div>
+				<Button type='button'>Submeter</Button>
 			</form>
 		</Modal>
 	)
