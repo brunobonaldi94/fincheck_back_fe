@@ -40,7 +40,9 @@ export function Transactions(){
 					<header>
 						<div className="flex items-center justify-between">
 							<TransactionTypeDropDown />
-							<button  onClick={handleOpenFiltersModal}>
+							<button
+								className="hover:translate-y-[-2px] transition-transform"
+								onClick={handleOpenFiltersModal}>
 								<FilterIcon />
 							</button>
 						</div>

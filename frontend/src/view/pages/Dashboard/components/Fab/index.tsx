@@ -10,7 +10,7 @@ export function Fab() {
 		openNewTransactionModal,
 	} = useDashboard();
 	return (
-		<div className="fixed right-4 bottom-4">
+		<div className="fixed right-4 bottom-4 hover:scale-105 transition-transform cursor-pointer">
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<div className="bg-teal-900 rounded-full text-white w-12 h-12 flex items-center justify-center">
