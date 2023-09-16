@@ -8,16 +8,19 @@ interface SelectProps {
     className?: string;
 	placeholder: string;
     error?: string;
+	onChange?: (value: string) => void;
+	value?: string;
 	options: {
 		value: string;
 		label: string;
 	}[];
 }
 
-export function Select({className, placeholder, error, options}: SelectProps) {
-	const [selectedValue, setSelectedValue] = useState('');
+export function Select({className, placeholder, error, options, onChange, value}: SelectProps) {
+	const [selectedValue, setSelectedValue] = useState(value ?? '');
 	function handleSelectChange(value: string) {
 		setSelectedValue(value);
+		onChange?.(value);
 	}
     return (
     <div>
@@ -28,7 +31,9 @@ export function Select({className, placeholder, error, options}: SelectProps) {
 			)}>
 				{placeholder}
 			</label>
-            <RadixSelect.Root onValueChange={handleSelectChange}>
+            <RadixSelect.Root
+				value={value}
+				onValueChange={handleSelectChange}>
                 <RadixSelect.Trigger
                 className={cn(`bg-white rounded-lg border border-gray-500 px-3 h-[52px] text-gray-800 w-full
                     select-none focus:border-gray-800 transition-all outline-none text-left relative pt-4`,

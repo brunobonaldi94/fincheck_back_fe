@@ -1,35 +1,25 @@
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { cn } from "../../app/utils/cn";
 import { DropdownMenu } from "./DropDownMenu";
-import { ColorIcon, type Color} from "./icons/ColorIcon";
+import { ColorIcon} from "./icons/ColorIcon";
 import { useState } from "react";
-
+import { ErrorDisplayMessage } from "./ErrorDisplayMessage";
+import { colors, type Color } from "../../app/config/constants";
 interface ColorsDropDownInputProps {
     className?: string;
     error?: string;
+	onChange?: (value: string) => void;
+	value?: string;
 }
 
-const colors: Color[] = [
-    { color: '#868E96', bg: '#F8F9FA' },
-    { color: '#FA5252', bg: '#FFF5F5' },
-    { color: '#E64980', bg: '#FFF0F6' },
-    { color: '#BE4BDB', bg: '#F8F0FC' },
-    { color: '#7950F2', bg: '#F3F0FF' },
-    { color: '#4C6EF5', bg: '#EDF2FF' },
-    { color: '#228BE6', bg: '#E7F5FF' },
-    { color: '#15AABF', bg: '#E3FAFC' },
-    { color: '#12B886', bg: '#E6FCF5' },
-    { color: '#40C057', bg: '#EBFBEE' },
-    { color: '#82C91E', bg: '#F4FCE3' },
-    { color: '#FAB005', bg: '#FFF9DB' },
-    { color: '#FD7E14', bg: '#FFF4E6' },
-    { color: '#212529', bg: '#F8F9FA' },
-  ];
-
- export function ColorsDropDownInput({className, error}: ColorsDropDownInputProps) {
-    const [selectedColor, setSelectedColor] = useState<Color | null>(null);
+ export function ColorsDropDownInput({className, error, onChange, value}: ColorsDropDownInputProps) {
+    const [selectedColor, setSelectedColor] = useState<Color | null>(() => {
+		if (!value) return null;
+		return colors.find((color) => color.color === value) ?? null;
+	});
     function handleSelectColor(_color: Color) {
         setSelectedColor(_color);
+		onChange?.(_color.color);
     }
     return (
         <div>
@@ -41,7 +31,7 @@ const colors: Color[] = [
                         error && "!border-red-900",
                         className
                         )}>
-                    Cor
+							Cor
                        <div className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-800'>
                         {!selectedColor && (
                                 <ChevronDownIcon className="w-6 h-6" />
@@ -62,6 +52,7 @@ const colors: Color[] = [
                         ))}
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
+			<ErrorDisplayMessage error={error} />
         </div>
     )
 }

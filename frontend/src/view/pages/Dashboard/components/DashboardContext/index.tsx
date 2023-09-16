@@ -20,8 +20,8 @@ export function DashboardContextProvider({children}: {children: React.ReactNode}
 		const isValuesVisible = localStorage.getItem(localStorageKeys.VISIBLE_VALUES);
 		return isValuesVisible ? Boolean(JSON.parse(isValuesVisible)) : true;
 	});
-	const [isNewAccountModalOpen, setIsNewAccountModalOpen] = useState(false);
-	const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(true);
+	const [isNewAccountModalOpen, setIsNewAccountModalOpen] = useState(true);
+	const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
 	const [newTransactionType, setNewTransactionType] = useState<'INCOME' | 'EXPENSE' | null>(null);
 
 	const toggleValueVisibility = useCallback(() => {
