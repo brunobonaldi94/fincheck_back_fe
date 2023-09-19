@@ -40,7 +40,10 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
   ): Promise<UserResponse> {
     const currentUser = await this.getUserAllFieldsById(userId);
-    if (currentUser.loginType === LoginType.GOOGLE && updateUserDto.email) {
+    if (
+      currentUser.loginType === LoginType.GOOGLE &&
+      updateUserDto.email !== currentUser.email
+    ) {
       throw new ForbiddenException('Cannot update email for Google login type');
     }
     const userResponse = (await this.userRepository.update({

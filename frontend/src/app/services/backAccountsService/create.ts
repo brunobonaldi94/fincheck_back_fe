@@ -1,11 +1,6 @@
+import { BankAccountType } from "../../entities/BankAccount";
 import httpClient from "../HttpClient";
 
-export enum BankAccountType {
-	CHECKING = 'CHECKING',
-	INVESTIMENT = 'INVESTIMENT',
-	CASH = 'CASH',
-
-}
 
 export interface BankAccountParams {
 	initialBalance: number;

@@ -4,7 +4,6 @@ import { InputCurrency } from "../../../../components/InputCurrency";
 import { useNewTransactionModalController } from "./useNewTransactionModalController";
 import { Input } from "../../../../components/Input";
 import { Select } from "../../../../components/Select";
-import { ColorsDropDownInput } from "../../../../components/ColorsDropDownInput";
 import { DatePickerInput } from "../../../../components/DatePickerInput";
 import { Button } from "../../../../components/Button";
 

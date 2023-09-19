@@ -7,6 +7,7 @@ import { LaunchScreen } from "../../view/components/LaunchScreen";
 import { cookiesKeys } from "../config/cookiesKeys";
 import CookieHandler from "../utils/CookieHandler";
 import { LoginType } from "../services/usersService/me";
+import { useQueryKeys } from "../config/useQueryKeys";
 
 export interface User {
 	name: string;
@@ -45,7 +46,7 @@ export function AuthProvider({ children } : { children: React.ReactNode}) {
 	});
 
 	const { isError, isFetching, isSuccess, remove, data} = useQuery({
-		queryKey: ["users", "me"],
+		queryKey: useQueryKeys.auth,
 		queryFn: () => userService.me(),
 		enabled: signedIn,
 		staleTime:Infinity,

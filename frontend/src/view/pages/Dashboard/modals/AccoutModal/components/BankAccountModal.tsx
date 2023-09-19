@@ -1,29 +1,40 @@
-import { Modal } from "../../../../components/Modal";
-import { InputCurrency } from "../../../../components/InputCurrency";
+import { Modal } from "../../../../../components/Modal";
+import { InputCurrency } from "../../../../../components/InputCurrency";
 
-import { useNewAccountModalController } from "./useNewAccountModalController";
-import { Input } from "../../../../components/Input";
-import { Select } from "../../../../components/Select";
-import { ColorsDropDownInput } from "../../../../components/ColorsDropDownInput";
-import { Button } from "../../../../components/Button";
+import { Input } from "../../../../../components/Input";
+import { Select } from "../../../../../components/Select";
+import { ColorsDropDownInput } from "../../../../../components/ColorsDropDownInput";
+import { Button } from "../../../../../components/Button";
 import { Controller } from "react-hook-form";
-import { BankAccountType } from "../../../../../app/services/backAccountsService/create";
-import { colors } from "../../../../../app/config/constants";
+import { BankAccountType } from "../../../../../../app/entities/BankAccount";
+import { colors } from "../../../../../../app/config/constants";
+import { useEditAccountModalController } from "../EditAccountModal/useEditAccountModalController";
+import { useNewAccountModalController } from "../NewAccountModal/useNewAccountModalController";
 
-export function NewAccountModal() {
+
+export interface IBankAccountModalControllerProps {
+	useBankAccountModalController: typeof useEditAccountModalController | typeof useNewAccountModalController;
+}
+
+export function BankAccountModal({
+	useBankAccountModalController,
+}: IBankAccountModalControllerProps) {
+
 	const {
-		isNewAccountModalOpen,
-		closeNewAccountModal,
+		isAccountModalOpen,
+		closeAccountModal,
 		errors,
 		handleSubmit,
 		register,
-		control
-	} = useNewAccountModalController();
+		control,
+		isLoading,
+		modalTitle,
+	} = useBankAccountModalController();
 	return (
 		<Modal
-			title="Nova Conta"
-			open={isNewAccountModalOpen}
-			onClose={closeNewAccountModal}>
+			title={modalTitle}
+			open={isAccountModalOpen}
+			onClose={closeAccountModal}>
 			<form onSubmit={handleSubmit}>
 				<div>
 					<span className="text-gray-600 tracking-[-0.5px] text-xs">Saldo Inicial</span>
@@ -81,7 +92,7 @@ export function NewAccountModal() {
 						)}
 					/>
 				</div>
-				<Button type='submit'>Submeter</Button>
+				<Button isLoading={isLoading} type='submit'>Submeter</Button>
 			</form>
 		</Modal>
 	)
