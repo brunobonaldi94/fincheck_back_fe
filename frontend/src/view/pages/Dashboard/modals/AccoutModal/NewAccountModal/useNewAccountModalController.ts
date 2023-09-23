@@ -56,6 +56,7 @@ export function useNewAccountModalController() {
 		errors,
 		control,
 		isLoading,
-		modalTitle: "Nova conta"
+		modalTitle: "Nova conta",
+		buttonTitle: "Criar conta",
 	};
 }

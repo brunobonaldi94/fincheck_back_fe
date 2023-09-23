@@ -6,6 +6,7 @@ import { bankAccountsService } from "../../../../../../app/services/backAccounts
 import { BankAccountType } from "../../../../../../app/entities/BankAccount";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const schema = z.object({
 	initialBalance: z.union([z.string().nonempty('Saldo inicial é obrigatório'), z.number()]),
@@ -18,12 +19,12 @@ type FormData = z.infer<typeof schema>;
 
 export function useEditAccountModalController() {
 	const { closeEditAccountModal, isEditAccountModalOpen, accountBeingEdited } = useDashboard();
+	const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
 	const {
 		register,
 		handleSubmit: hookFormHandleSubmit,
 		formState: { errors },
 		control,
-		reset
 	} = useForm<FormData>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -47,14 +48,15 @@ export function useEditAccountModalController() {
 				initialBalance: initialBalance,
 				id: accountBeingEdited?.id,
 			});
-			closeEditAccountModal();
-			reset();
-			toast.success("Conta atualizada com sucesso!");
 			queryClient.invalidateQueries({queryKey: ["bank-accounts"]})
+			closeEditAccountModal();
+			toast.success("Conta atualizada com sucesso!");
 		} catch (error) {
 			toast.error("Erro ao atualizar conta!")
 		}
 	});
+
+
 
 	return {
 		closeAccountModal: closeEditAccountModal,
@@ -65,5 +67,7 @@ export function useEditAccountModalController() {
 		control,
 		isLoading,
 		modalTitle: "Editar conta",
+		buttonTitle: "Atualizar conta",
+		isDeleteAccountModalOpen,
 	};
 }

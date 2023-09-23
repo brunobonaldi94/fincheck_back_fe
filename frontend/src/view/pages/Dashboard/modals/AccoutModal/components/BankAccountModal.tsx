@@ -10,14 +10,19 @@ import { BankAccountType } from "../../../../../../app/entities/BankAccount";
 import { colors } from "../../../../../../app/config/constants";
 import { useEditAccountModalController } from "../EditAccountModal/useEditAccountModalController";
 import { useNewAccountModalController } from "../NewAccountModal/useNewAccountModalController";
+import { TrashIcon } from "../../../../../components/icons/TrashIcon";
+import { ConfirmDeleteModal } from "../../../../../components/ConfirmDeleteModal";
+import { useBankAccountModalController } from "./useBankAccountModalController";
 
 
 export interface IBankAccountModalControllerProps {
-	useBankAccountModalController: typeof useEditAccountModalController | typeof useNewAccountModalController;
+	useBankAccountController: typeof useEditAccountModalController | typeof useNewAccountModalController;
+	isEdit?: boolean;
 }
 
 export function BankAccountModal({
-	useBankAccountModalController,
+	useBankAccountController,
+	isEdit = false,
 }: IBankAccountModalControllerProps) {
 
 	const {
@@ -29,12 +34,28 @@ export function BankAccountModal({
 		control,
 		isLoading,
 		modalTitle,
-	} = useBankAccountModalController();
+		buttonTitle,
+		isDeleteAccountModalOpen,
+		handleOpenDeleteAccountModal,
+		handleCloseDeleteAccountModal,
+		handleDeleteAccount
+	} = useBankAccountModalController({ useBankAccountController});
+	if (isDeleteAccountModalOpen){
+		return <ConfirmDeleteModal
+				title="Tem certeza que deseja excluir essa conta?"
+				onClose={handleCloseDeleteAccountModal}
+				description="Ao excluir a conta, também serão excluídas todos os registros de receitas e despesas relacionados."
+				onConfirm={handleDeleteAccount}
+			/>
+	}
 	return (
 		<Modal
 			title={modalTitle}
 			open={isAccountModalOpen}
-			onClose={closeAccountModal}>
+			onClose={closeAccountModal}
+			rigthAction={isEdit ? (
+			<TrashIcon onClick={handleOpenDeleteAccountModal} className="w-6 h-6 text-red-900 cursor-pointer" />) : undefined}
+			>
 			<form onSubmit={handleSubmit}>
 				<div>
 					<span className="text-gray-600 tracking-[-0.5px] text-xs">Saldo Inicial</span>
@@ -92,7 +113,7 @@ export function BankAccountModal({
 						)}
 					/>
 				</div>
-				<Button isLoading={isLoading} type='submit'>Submeter</Button>
+				<Button isLoading={isLoading} type='submit'>{buttonTitle}</Button>
 			</form>
 		</Modal>
 	)

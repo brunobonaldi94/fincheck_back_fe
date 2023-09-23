@@ -4,7 +4,8 @@ import { BankAccountModal } from "../components/BankAccountModal";
 export function EditAccountModal() {
 	return (
 		<BankAccountModal
-			useBankAccountModalController={useEditAccountModalController}
+			useBankAccountController={useEditAccountModalController}
+			isEdit
 		/>
 	)
 }
