@@ -6,7 +6,6 @@ import { bankAccountsService } from "../../../../../../app/services/backAccounts
 import { BankAccountType } from "../../../../../../app/entities/BankAccount";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useState } from "react";
 
 const schema = z.object({
 	initialBalance: z.union([z.string().nonempty('Saldo inicial é obrigatório'), z.number()]),
@@ -19,7 +18,6 @@ type FormData = z.infer<typeof schema>;
 
 export function useEditAccountModalController() {
 	const { closeEditAccountModal, isEditAccountModalOpen, accountBeingEdited } = useDashboard();
-	const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
 	const {
 		register,
 		handleSubmit: hookFormHandleSubmit,
@@ -37,13 +35,13 @@ export function useEditAccountModalController() {
 
 
 	const queryClient = useQueryClient();
-	const { isLoading, mutateAsync } = useMutation(bankAccountsService.update);
+	const { isLoading, mutateAsync: updateAccount } = useMutation(bankAccountsService.update);
 
 	const handleSubmit = hookFormHandleSubmit(async (data) => {
 		try {
 			if (!accountBeingEdited || !accountBeingEdited?.id) return;
 			const initialBalance = typeof data.initialBalance === 'string' ?  Number(data.initialBalance.replace(/,/g, '')) : data.initialBalance;
-			await mutateAsync({
+			await updateAccount({
 				...data,
 				initialBalance: initialBalance,
 				id: accountBeingEdited?.id,
@@ -68,6 +66,5 @@ export function useEditAccountModalController() {
 		isLoading,
 		modalTitle: "Editar conta",
 		buttonTitle: "Atualizar conta",
-		isDeleteAccountModalOpen,
 	};
 }

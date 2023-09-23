@@ -6,6 +6,7 @@ import { bankAccountsService } from "../../../../../../app/services/backAccounts
 import { BankAccountType } from "../../../../../../app/entities/BankAccount";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useQueryKeys } from "../../../../../../app/config/useQueryKeys";
 
 const schema = z.object({
 	initialBalance: z.union(
@@ -42,7 +43,7 @@ export function useNewAccountModalController() {
 			closeNewAccountModal();
 			reset();
 			toast.success("Conta criada com sucesso!");
-			queryClient.invalidateQueries({queryKey: ["bank-accounts"]})
+			queryClient.invalidateQueries({queryKey: useQueryKeys.backAccounts})
 		} catch (error) {
 			toast.error("Erro ao criar conta!")
 		}

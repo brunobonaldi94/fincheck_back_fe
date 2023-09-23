@@ -3,6 +3,7 @@ import * as RadixSelect from '@radix-ui/react-select';
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import { cn } from '../../app/utils/cn';
 import { ErrorDisplayMessage } from './ErrorDisplayMessage';
+import { Spinner } from './Spinner';
 
 interface SelectProps {
     className?: string;
@@ -14,9 +15,10 @@ interface SelectProps {
 		value: string;
 		label: string;
 	}[];
+	isLoading?: boolean;
 }
 
-export function Select({className, placeholder, error, options, onChange, value}: SelectProps) {
+export function Select({className, placeholder, error, options, onChange, value, isLoading}: SelectProps) {
 	const [selectedValue, setSelectedValue] = useState(value ?? '');
 	function handleSelectChange(value: string) {
 		setSelectedValue(value);
@@ -24,12 +26,12 @@ export function Select({className, placeholder, error, options, onChange, value}
 	}
     return (
     <div>
-        <div className='relative'>
+        <div className="relative">
 			<label className={cn(
 				'z-10 absolute top-1/2 -translate-y-1/2 left-3 text-gray-700 pointer-events-none',
 				selectedValue && 'text-xs left-[13px] top-2 transition-all translate-y-0',
 			)}>
-				{placeholder}
+				{isLoading ? <Spinner className="w-6 h-6" /> : placeholder}
 			</label>
             <RadixSelect.Root
 				value={value}

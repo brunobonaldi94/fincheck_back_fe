@@ -38,7 +38,8 @@ export function BankAccountModal({
 		isDeleteAccountModalOpen,
 		handleOpenDeleteAccountModal,
 		handleCloseDeleteAccountModal,
-		handleDeleteAccount
+		handleDeleteAccount,
+		isLoadingDeleteAccount
 	} = useBankAccountModalController({ useBankAccountController});
 	if (isDeleteAccountModalOpen){
 		return <ConfirmDeleteModal
@@ -46,6 +47,7 @@ export function BankAccountModal({
 				onClose={handleCloseDeleteAccountModal}
 				description="Ao excluir a conta, também serão excluídas todos os registros de receitas e despesas relacionados."
 				onConfirm={handleDeleteAccount}
+				isLoading={isLoadingDeleteAccount}
 			/>
 	}
 	return (

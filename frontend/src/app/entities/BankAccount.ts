@@ -14,3 +14,4 @@ export interface BankAccount {
 	color: string;
 	currentBalance: number;
 }
+

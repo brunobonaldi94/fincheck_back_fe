@@ -32,7 +32,7 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
-      - "5556:5555"
+      - "5555:5555"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
