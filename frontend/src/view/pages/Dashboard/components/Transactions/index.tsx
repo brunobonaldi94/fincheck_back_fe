@@ -15,6 +15,7 @@ import { TransactionTypeDropDown } from "./TransactionTypeDropDown";
 import { FiltersModal } from "./FilterModal";
 import { formatDate } from "../../../../../app/utils/formatDate";
 import { EditTransactionModal } from "../../modals/TransactionModal/EditTransactionModal";
+import React from "react";
 
 export function Transactions(){
 	const {
@@ -28,8 +29,6 @@ export function Transactions(){
 		handleChangeFilters,
 		filters,
 		handleApplyFilters,
-		handleCloseEditTransactionModal,
-		isEditTransactionModalOpen,
 		handleOpenEditTransactionModal,
 		transactionBeingEdited,
 	} = useTransactionsController();
@@ -98,16 +97,11 @@ export function Transactions(){
 						</div>
 					)}
 					{(hasTransactions && !isLoading) && transactions.map((transaction) => (
-						<>
+						<React.Fragment key={transaction.id}>
 							{transactionBeingEdited && (
-								<EditTransactionModal
-									onClose={handleCloseEditTransactionModal}
-									open={isEditTransactionModalOpen}
-									transaction={transactionBeingEdited}
-								/>
+								<EditTransactionModal />
 							)}
 							<div
-								key={transaction.id}
 								className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4"
 								role="button"
 								onClick={() => handleOpenEditTransactionModal(transaction)}
@@ -133,7 +127,7 @@ export function Transactions(){
 										{formatCurrency(transaction.value)}
 								</span>
 							</div>
-						</>
+						</React.Fragment>
 					))}
 					</div>
 				</>

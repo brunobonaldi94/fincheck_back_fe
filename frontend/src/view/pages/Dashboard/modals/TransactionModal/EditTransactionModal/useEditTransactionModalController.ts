@@ -3,12 +3,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useBankAccount } from "../../../../../../app/hooks/useBankAccount";
 import { useCategory } from "../../../../../../app/hooks/useCategory";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useMutation, useQueryClient,  } from "@tanstack/react-query";
 import { transactionsService } from "../../../../../../app/services/transactionsService";
-import { Transaction } from "../../../../../../app/entities/Transaction";
 import { useQueryKeys } from "../../../../../../app/config/useQueryKeys";
 import toast from "react-hot-toast";
+import { useDashboard } from "../../../components/DashboardContext/useDashboard";
 
 const schema = z.object({
     value: z.string().nonempty("Informe o valor"),
@@ -20,13 +20,10 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export function useEditTransactionModalController(transaction: Transaction | null, onClose: () => void) {
-
+export function useEditTransactionModalController() {
+	const { isEditTransactionModalOpen, closeEditTransactionModal, transactionBeingEdited: transaction, } = useDashboard();
     const { accounts, isFetching: isFetchingAccounts } = useBankAccount();
     const { categories: categoriesList, isFetching: isFetchingCategories } = useCategory();
-
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
 	const {
         mutateAsync: updateTransaction,
         isLoading
@@ -62,7 +59,7 @@ export function useEditTransactionModalController(transaction: Transaction | nul
                 value: Number(data.value.replace(/,/g, '')),
 				date: data.date.toISOString(),
             });
-            onClose();
+			closeEditTransactionModal();
             toast.success(transaction!.type === 'INCOME' ?
                  "Receita editada com sucesso!" : "Despesa editada com sucesso!");
             queryClient.invalidateQueries({queryKey: useQueryKeys.transactions})
@@ -74,29 +71,10 @@ export function useEditTransactionModalController(transaction: Transaction | nul
         }
     })
 
-	const {
-		isLoading: isLoadinDeleteModal,
-		mutateAsync: removeTransaction,
-	} = useMutation(transactionsService.remove)
-	async function handleDeleteTransaction() {
-		try {
-			await removeTransaction(transaction!.id);
-			queryClient.invalidateQueries({queryKey: useQueryKeys.transactions})
-			queryClient.invalidateQueries({queryKey: useQueryKeys.backAccounts})
-			toast.success("Transação deletada com sucesso!");
-			onClose();
-		} catch {
-			toast.error("Erro ao deletar transação!")
-		}
-	}
-
-	function handleDeleteModalOpen() {
-		setIsDeleteModalOpen(true);
-	}
-	function handleDeleteModalClose() {
-		setIsDeleteModalOpen(false);
-	}
     return {
+		closeTransactionModal: closeEditTransactionModal,
+		isTransactionModalOpen: isEditTransactionModalOpen,
+		transactionType: transaction?.type,
         register,
         control,
         errors,
@@ -106,10 +84,6 @@ export function useEditTransactionModalController(transaction: Transaction | nul
         categories,
         isFetchingCategories,
         isLoading,
-		isDeleteModalOpen,
-		isLoadinDeleteModal,
-		handleDeleteTransaction,
-		handleDeleteModalClose,
-		handleDeleteModalOpen,
+		isEdit: true,
     };
 }

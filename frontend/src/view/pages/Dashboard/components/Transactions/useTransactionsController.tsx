@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDashboard } from "../DashboardContext/useDashboard";
 import { useTransactions } from "../../../../../app/hooks/useTransactions";
-import { Transaction, TransactionFilters } from "../../../../../app/entities/Transaction";
+import { TransactionFilters } from "../../../../../app/entities/Transaction";
 
 export function useTransactionsController() {
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-
-	const [isEditTransactionModalOpen, setIsEditTransactionModalOpen] = useState(false);
-	const [transactionBeingEdited, setTransactionBeingEdited] = useState<Transaction | null>(null);
+	const {
+		isEditTransactionModalOpen,
+		transactionBeingEdited,
+		openEditTransactionModal,
+		closeEditTransactionModal,
+	} = useDashboard();
 	const [filters, setFilters] = useState<TransactionFilters>({
 		month: new Date().getMonth(),
 		year: new Date().getFullYear(),
@@ -56,15 +59,6 @@ export function useTransactionsController() {
 		setIsFilterModalOpen(false);
 	}
 
-	function handleOpenEditTransactionModal(transaction: Transaction) {
-		setIsEditTransactionModalOpen(true);
-		setTransactionBeingEdited(transaction);
-	}
-
-	function handleCloseEditTransactionModal() {
-		setIsEditTransactionModalOpen(false);
-		setTransactionBeingEdited(null);
-	}
 
 	return {
 		areValuesVisible,
@@ -79,7 +73,7 @@ export function useTransactionsController() {
 		handleApplyFilters,
 		isEditTransactionModalOpen,
 		transactionBeingEdited,
-		handleCloseEditTransactionModal,
-		handleOpenEditTransactionModal,
+		handleCloseEditTransactionModal: closeEditTransactionModal,
+		handleOpenEditTransactionModal: openEditTransactionModal,
 	}
 }

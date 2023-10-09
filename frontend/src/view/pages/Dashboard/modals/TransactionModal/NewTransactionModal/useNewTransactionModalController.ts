@@ -39,12 +39,24 @@ export function useNewTransactionModalController() {
         handleSubmit: hookFormHandleSubmit,
         formState: { errors },
         control,
-        reset
+        reset,
+		clearErrors,
     } = useForm<FormData>({
         resolver: zodResolver(schema),
     });
 
     const queryClient = useQueryClient();
+	const resetAndCloseModal = () => {
+		reset({
+			value: "",
+			name: "",
+			categoryId: "",
+			bankAccountId: "",
+			date: new Date(),
+		});
+		clearErrors();
+		closeNewTransactionModal();
+	}
     const handleSubmit = hookFormHandleSubmit(async (data) => {
         try {
             if (newTransactionType  === null ){
@@ -55,12 +67,12 @@ export function useNewTransactionModalController() {
                 type: newTransactionType,
                 value: Number(data.value.replace(/,/g, '')),
             });
-            closeNewTransactionModal();
-            reset();
-            toast.success(newTransactionType === 'INCOME' ?
-                 "Receita criada com sucesso!" : "Despesa criada com sucesso!");
+            resetAndCloseModal();
+			toast.success(newTransactionType === 'INCOME' ?
+			"Receita criada com sucesso!" : "Despesa criada com sucesso!");
             queryClient.invalidateQueries({queryKey: useQueryKeys.transactions})
 			queryClient.invalidateQueries({queryKey: useQueryKeys.backAccounts})
+
         } catch (error) {
             toast.error("Erro ao criar transação!")
 			toast.error(newTransactionType === 'INCOME' ?
@@ -69,9 +81,9 @@ export function useNewTransactionModalController() {
     })
 
     return {
-        closeNewTransactionModal,
-        isNewTransactionModalOpen,
-        newTransactionType,
+        closeTransactionModal: closeNewTransactionModal,
+        isTransactionModalOpen: isNewTransactionModalOpen,
+        transactionType: newTransactionType,
         register,
         control,
         errors,
@@ -81,6 +93,6 @@ export function useNewTransactionModalController() {
         categories,
         isFetchingCategories,
         isLoading,
-		title: newTransactionType === 'INCOME' ? 'Nova Receita' : 'Nova Despesa',
-    };
+		isEdit: false,
+     };
 }
