@@ -49,7 +49,8 @@ export function Select({className, placeholder, error, options, onChange, value,
                 </RadixSelect.Icon>
                 </RadixSelect.Trigger>
                 <RadixSelect.Portal>
-                <RadixSelect.Content className="z-[99] overflow-hidden bg-white rounded-2xl border border-gray-100 shadow-[0px_11px_20px_0px_rgba(0,0,0,0.10)]">
+              {!isLoading && (
+				<RadixSelect.Content className="z-[99] overflow-hidden bg-white rounded-2xl border border-gray-100 shadow-[0px_11px_20px_0px_rgba(0,0,0,0.10)]">
                     <RadixSelect.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-gray-800 cursor-default">
                     <ChevronUpIcon />
                     </RadixSelect.ScrollUpButton>
@@ -68,6 +69,7 @@ export function Select({className, placeholder, error, options, onChange, value,
                     <ChevronDownIcon />
                     </RadixSelect.ScrollDownButton>
                 </RadixSelect.Content>
+               )}
                 </RadixSelect.Portal>
             </RadixSelect.Root>
         </div>

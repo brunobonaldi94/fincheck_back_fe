@@ -6,6 +6,18 @@ export interface Transaction {
 	categoryId: string;
 	name: string;
 	value: number;
-	date: Date;
+	date: Date | string;
 	type: TransactionType;
-  }
+	category?: {
+		id: string;
+		name: string;
+		icon: string;
+	};
+}
+
+export type TransactionFilters = {
+	month: number;
+	year: number;
+	bankAccountId?: string;
+	type?: TransactionType;
+}

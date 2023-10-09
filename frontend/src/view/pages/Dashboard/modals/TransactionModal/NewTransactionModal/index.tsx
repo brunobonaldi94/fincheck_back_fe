@@ -1,11 +1,11 @@
-import { Modal } from "../../../../components/Modal";
-import { InputCurrency } from "../../../../components/InputCurrency";
+import { Modal } from "../../../../../components/Modal";
+import { InputCurrency } from "../../../../../components/InputCurrency";
 
 import { useNewTransactionModalController } from "./useNewTransactionModalController";
-import { Input } from "../../../../components/Input";
-import { Select } from "../../../../components/Select";
-import { DatePickerInput } from "../../../../components/DatePickerInput";
-import { Button } from "../../../../components/Button";
+import { Input } from "../../../../../components/Input";
+import { Select } from "../../../../../components/Select";
+import { DatePickerInput } from "../../../../../components/DatePickerInput";
+import { Button } from "../../../../../components/Button";
 import { Controller } from "react-hook-form";
 
 export function NewTransactionModal() {

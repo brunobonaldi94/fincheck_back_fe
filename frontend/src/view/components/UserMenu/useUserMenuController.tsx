@@ -3,12 +3,15 @@ import { useAuth } from "../../../app/hooks/useAuth";
 
 export function useUserMenuController() {
     const {signout, user} = useAuth();
-	const [openProfileModal, setOpenProfileModal] = useState<boolean>(false);
+    const [openProfileModal, setOpenProfileModal] = useState<boolean>(false);
     const [initialsFromName, setInitialsFromName] = useState<string>('');
 
     const getInitialsFromName = useCallback(() => {
       if (!user) {
           return ''
+      }
+      if (user.name.split(' ').length === 1) {
+        return user.name.slice(0,2).toUpperCase();
       }
       const { name } = user;
       const nameAsArray = name.split(' ');
@@ -26,19 +29,19 @@ export function useUserMenuController() {
         setInitialsFromName(initialsName);
     }, [getInitialsFromName])
 
-	const handleCloseProfileModal = useCallback(() => {
-		setOpenProfileModal(false);
-	},[]);
+    const handleCloseProfileModal = useCallback(() => {
+        setOpenProfileModal(false);
+    },[]);
 
-	const handleOpenProfileModal = useCallback(() => {
-		setOpenProfileModal(true);
-	},[]);
+    const handleOpenProfileModal = useCallback(() => {
+        setOpenProfileModal(true);
+    },[]);
 
     return {
         signout,
         initialsFromName,
-		openProfileModal,
-		handleCloseProfileModal,
-		handleOpenProfileModal,
+        openProfileModal,
+        handleCloseProfileModal,
+        handleOpenProfileModal,
     }
 }

@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { bankAccountsService } from "../../../../../../app/services/backAccountsService";
 import { useDashboard } from "../../../components/DashboardContext/useDashboard";
 import toast from "react-hot-toast";
+import { useQueryKeys } from "../../../../../../app/config/useQueryKeys";
 
 export interface IBankAccountModalControllerProps {
 	useBankAccountController: typeof useEditAccountModalController | typeof useNewAccountModalController;
@@ -39,7 +40,7 @@ export function useBankAccountModalController({useBankAccountController}: IBankA
 	async function handleDeleteAccount() {
 		try {
 			await removeAccount(accountBeingEdited!.id);
-			queryClient.invalidateQueries({queryKey: ["bank-accounts"]})
+			queryClient.invalidateQueries({queryKey: useQueryKeys.backAccounts})
 			toast.success("Conta deletada com sucesso!");
 			closeAccountModal();
 		} catch (error) {

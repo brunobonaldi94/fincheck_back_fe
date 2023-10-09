@@ -13,6 +13,8 @@ import { Spinner } from "../../../../components/Spinner";
 import emptyStateImg from "../../../../../assets/empty-state.svg";
 import { TransactionTypeDropDown } from "./TransactionTypeDropDown";
 import { FiltersModal } from "./FilterModal";
+import { formatDate } from "../../../../../app/utils/formatDate";
+import { EditTransactionModal } from "../../modals/TransactionModal/EditTransactionModal";
 
 export function Transactions(){
 	const {
@@ -23,6 +25,13 @@ export function Transactions(){
 		isFilterModalOpen,
 		handleOpenFiltersModal,
 		handleCloseFiltersModal,
+		handleChangeFilters,
+		filters,
+		handleApplyFilters,
+		handleCloseEditTransactionModal,
+		isEditTransactionModalOpen,
+		handleOpenEditTransactionModal,
+		transactionBeingEdited,
 	} = useTransactionsController();
 	const hasTransactions = transactions.length > 0;
 	return (
@@ -36,10 +45,17 @@ export function Transactions(){
 			)}
 			{!isInitialLoading && (
 				<>
-					<FiltersModal onClose={handleCloseFiltersModal} open={isFilterModalOpen} />
+					<FiltersModal
+						onClose={handleCloseFiltersModal}
+						open={isFilterModalOpen}
+						onApplyFilters={handleApplyFilters}
+						/>
 					<header>
 						<div className="flex items-center justify-between">
-							<TransactionTypeDropDown />
+							<TransactionTypeDropDown
+								onSelect={(type) => handleChangeFilters('type')(type)}
+								selectedType={filters.type}
+							/>
 							<button
 								className="hover:translate-y-[-2px] transition-transform"
 								onClick={handleOpenFiltersModal}>
@@ -50,7 +66,10 @@ export function Transactions(){
 							<Swiper
 								slidesPerView={3.0}
 								centeredSlides
-
+								initialSlide={filters.month}
+								onSlideChange={(swiper) => {
+									handleChangeFilters('month')(swiper.activeIndex)
+								}}
 							>
 								<SliderNavigation />
 								{MONTHS.map((month, index) => (
@@ -78,36 +97,44 @@ export function Transactions(){
 							<p className="text-gray-700">Não encontramos nenhuma transação!</p>
 						</div>
 					)}
-					{(hasTransactions && !isLoading) && (
+					{(hasTransactions && !isLoading) && transactions.map((transaction) => (
 						<>
-							<div className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4">
+							{transactionBeingEdited && (
+								<EditTransactionModal
+									onClose={handleCloseEditTransactionModal}
+									open={isEditTransactionModalOpen}
+									transaction={transactionBeingEdited}
+								/>
+							)}
+							<div
+								key={transaction.id}
+								className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4"
+								role="button"
+								onClick={() => handleOpenEditTransactionModal(transaction)}
+								>
 								<div className="flex-1 flex items-center gap-3">
-									<CategoryIcon type="expense" />
+									<CategoryIcon
+										type={transaction.type === 'INCOME' ? 'income' : 'expense'}
+										category={transaction.category?.icon}
+										/>
 									<div>
-										<strong className="block font-bold tracking-[-0.5px]">Almoço</strong>
-										<span className="text-sm text-gray-600">04/06/2023</span>
+										<strong className="block font-bold tracking-[-0.5px]">
+											{transaction.name}
+										</strong>
+										<span className="text-sm text-gray-600">
+											{formatDate(new Date(transaction.date))}
+										</span>
 									</div>
 								</div>
-								<span className={cn("text-red-800 tracking-[-0.5px] font-medium",
-									!areValuesVisible && "blur-sm")}>
-										{formatCurrency(-123)}
-								</span>
-							</div>
-							<div className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4">
-								<div className="flex-1 flex items-center gap-3">
-									<CategoryIcon type="income" />
-									<div>
-										<strong className="block font-bold tracking-[-0.5px]">Salario</strong>
-										<span className="text-sm text-gray-600">04/06/2023</span>
-									</div>
-								</div>
-								<span className={cn("text-green-800 tracking-[-0.5px] font-medium",
-									!areValuesVisible && "blur-sm")}>
-										{formatCurrency(123)}
+								<span className={cn("tracking-[-0.5px] font-medium",
+									!areValuesVisible && "blur-sm",
+									transaction.type === 'INCOME' ? "text-green-800" : "text-red-800")}>
+										{transaction.type === 'INCOME' ? "+" : "-"}
+										{formatCurrency(transaction.value)}
 								</span>
 							</div>
 						</>
-					)}
+					))}
 					</div>
 				</>
 			)}

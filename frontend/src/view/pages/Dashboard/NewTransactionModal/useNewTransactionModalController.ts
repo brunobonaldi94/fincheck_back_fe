@@ -8,7 +8,7 @@ import { useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { transactionsService } from "../../../../../app/services/transactionsService";
 import toast from "react-hot-toast";
-import { useQueryKeys } from "../../../../../app/config/useQueryKeys";
+import { useQueryKeys } from "../../../../..../app/config/useQueryKeys";
 
 const schema = z.object({
     value: z.string().nonempty("Informe o valor"),
